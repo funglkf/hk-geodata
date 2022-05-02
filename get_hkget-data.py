@@ -24,27 +24,27 @@ for script in script_list:
   if 'var g_gsDatasetInfo' in str(script):
     # print(str(script))
     m = re.search(r'var g_gsDatasetInfo = (.+?);', str(script), re.DOTALL)
-    open('docs/g_gsDatasetInfo.json', 'a').write(m.group(1))
+    open('docs/g_gsDatasetInfo.json', 'w').write(m.group(1))
     g_gsDatasetInfo_json = json.loads(m.group(1))
 
   if 'var g_hkgsCategoryInfo' in str(script):
     m = re.search(r'var g_hkgsCategoryInfo = (.+?);', str(script), re.DOTALL)
-    open('docs/g_hkgsCategoryInfo.json', 'a').write(m.group(1))
+    open('docs/g_hkgsCategoryInfo.json', 'w').write(m.group(1))
     g_hkgsCategoryInfo_json = json.loads(m.group(1))
 
   if 'var hkgsDataProviderList' in str(script):
     m = re.search(r'var hkgsDataProviderList = (\[.+?\])', str(script), re.DOTALL)
-    open('docs/hkgsDataProviderList.json', 'a').write(m.group(1))
+    open('docs/hkgsDataProviderList.json', 'w').write(m.group(1))
     hkgsDataProviderList_json = json.loads(m.group(1))
 
   if 'var hkgsDataProviderAndDatasetMapping' in str(script):
     m = re.search(r'var hkgsDataProviderAndDatasetMapping = ({.+?})', str(script), re.DOTALL)
-    open('docs/hkgsDataProviderAndDatasetMapping.json', 'a').write(m.group(1))
+    open('docs/hkgsDataProviderAndDatasetMapping.json', 'w').write(m.group(1))
     hkgsDataProviderAndDatasetMapping_json = json.loads(m.group(1))
 
   if 'var hkgsCategoryList' in str(script):
     m = re.search(r'var hkgsCategoryList = (.+?);', str(script), re.DOTALL)
-    open('docs/hkgsCategoryList.json', 'a').write(m.group(1))
+    open('docs/hkgsCategoryList.json', 'w').write(m.group(1))
     hkgsCategoryList_json = json.loads(m.group(1))
 
 
@@ -60,6 +60,27 @@ df_hkgsCategoryList= pd.DataFrame.from_records(hkgsCategoryList_json)
 df_maindata = pd.merge(df_g_gsDatasetInfo[['DATASET_UUID','DATASET_NAME_EN','DATASET_NAME_TC','DATA_PROVIDER_ID']],
          df_hkgsDataProviderList[['dpid','nameEN','nameTC']], left_on='DATA_PROVIDER_ID', right_on='dpid').drop(columns=['dpid', 'DATA_PROVIDER_ID'])
 
-## write to index page
+
+## Change as hyperlink
+df_maindata['DATASET_UUID'] =  "<a href='https://geojson.tools/?url=https://geodata.gov.hk/gs/api/v1.0.0/geoDataQuery?q=%7Bv%3A%221%2E0%2E0%22%2Cid%3A%22" + df_maindata['DATASET_UUID'].astype(str) + "%22%2Clang%3A%22ALL%22%7D'  target=\"_blank\">" + df_maindata['DATASET_UUID'].astype(str) + "</a>"
+
+
+## write to index page with datatable
 with open('docs/index.html', 'w') as fo:
-    df_maindata.to_html(fo)
+
+    fo.write('''
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css"/>
+<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+ ''')
+
+    df_maindata.to_html(fo,escape=False, table_id='example')
+
+    fo.write('''<script>$(document).ready(function () { $("#example").DataTable();}); </script> ''')
+
+
+# ## fetch geojson
+# df_maindata['link'] = "https://geodata.gov.hk/gs/api/v1.0.0/geoDataQuery?q=%7Bv%3A%221%2E0%2E0%22%2Cid%3A%22" + df_maindata['DATASET_UUID'].astype(str) + "%22%2Clang%3A%22ALL%22%7D" + df_maindata['DATASET_UUID'].astype(str) 
+# for index, row in df_maindata[['DATASET_NAME_EN','link']].iterrows():
+#   response = session.get(row.link)
+#   open('docs/geojson/' + row['DATASET_NAME_EN']+'.geojson', 'w').write(response.text)
