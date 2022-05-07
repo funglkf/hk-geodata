@@ -1,14 +1,14 @@
 <script>
   import { onMount } from "svelte";
   import { browser } from "$app/env";
-  import JSONFormatter from "json-formatter-js";
+  //import JSONFormatter from "json-formatter-js";
 
   export let apiUrl;
   let last_select = null;
 
   onMount(async () => {
     if (browser) {
-      // const JSONFormatter = await import("json-formatter-js");
+      const JSONFormatter = await import("json-formatter-js");
       const leaflet = await import("leaflet");
 
       const OSM = leaflet.tileLayer(
