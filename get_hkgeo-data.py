@@ -61,7 +61,7 @@ df_maindata = pd.merge(df_g_gsDatasetInfo[['DATASET_UUID','DATASET_NAME_EN','DAT
          df_hkgsDataProviderList[['dpid','nameEN','nameTC']], left_on='DATA_PROVIDER_ID', right_on='dpid').drop(columns=['dpid', 'DATA_PROVIDER_ID'])
 
 ## Save Mapping dataset info to Json
-open('docs/simplified_datasetinfo.json', 'w').write(df_maindata.to_json(orient='records'))
+open('static/json/simplified_datasetinfo.json', 'w').write(df_maindata.to_json(orient='records'))
 
 ## Change as hyperlink
 df_maindata['DATASET_UUID'] =  "<a href='https://geojson.tools/?url=https://geodata.gov.hk/gs/api/v1.0.0/geoDataQuery?q=%7Bv%3A%221%2E0%2E0%22%2Cid%3A%22" + df_maindata['DATASET_UUID'].astype(str) + "%22%2Clang%3A%22ALL%22%7D'  target=\"_blank\">" + df_maindata['DATASET_UUID'].astype(str) + "</a>"
