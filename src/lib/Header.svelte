@@ -17,7 +17,7 @@
         class="flex items-center font-serif italic font-semibold text-lg mr-4"
         href="/"
       >
-        <img class="h-4 w-4 mx-1" src="favicon.svg" alt="Icon" />
+        <img class="h-4 w-4 mx-1" src="/favicon.svg" alt="Icon" />
         <!-- <Fa icon={faMagnifyingGlassChart} class="space-x-0" /> -->
         Hong Kong Geo Data
       </a>
