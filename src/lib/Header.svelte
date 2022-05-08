@@ -4,7 +4,7 @@
   const headerList = [
     { href: "/", name: "Overview" },
     { href: "/dataset", name: "DataTable" },
-    { href: "/map", name: "map" },
+    // { href: "/map", name: "map" },
   ];
 </script>
 
