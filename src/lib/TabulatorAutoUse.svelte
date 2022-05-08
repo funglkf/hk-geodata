@@ -7,28 +7,23 @@
   export let title = "Table View";
 
   export let tableDataUrl;
-
   export let tableList = [];
-
   export let copyData = true;
   export let saveExcel = true;
   export let saveCSV = true;
-
   export let customTableConfig = {};
 
   let showItemSidebar = false;
   let searchTerm = "";
-
   let selectName;
-
   let table;
 
   function makeTable(node, { ajaxurl }) {
     table = new Tabulator(node, {
       ...{
         ajaxURL: ajaxurl,
-        ajaxResponse: function (url, params, response) {
-          console.log(response);
+        ajaxResponse: (url, params, response) => {
+          // console.log(response);
           return response;
         },
         autoColumns: true,
@@ -50,7 +45,21 @@
 
     return {
       update: ({ ajaxurl }) => {
-        table.setData(ajaxurl, {});
+        if (typeof ajaxurl !== "undefined") {
+          // console.log(ajaxurl);
+          fetch(ajaxurl)
+            .then((response) => response.json())
+            .then((data) => {
+              const tableData = (() => {
+                if (data.type != "FeatureCollection") {
+                  return data;
+                } else {
+                  return data.features.map((feature) => feature.properties);
+                }
+              })();
+              table.setData(tableData, {});
+            });
+        }
       },
       // destroy: () => alert('bye bye table :\'(')
     };

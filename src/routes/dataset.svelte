@@ -8,14 +8,17 @@
   onMount(async function () {
     const response = await fetch(tableDataUrl);
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     tableList = data.map((obj) => {
       return {
         name: obj["DATASET_NAME_TC"],
         url:
-          `https://geodata.gov.hk/gs/api/v1.0.0/geoDataQuery?q=%7Bv%3A%221%2E0%2E0%22%2Cid%3A%22` +
-          obj["DATASET_UUID"] +
-          `%22%2Clang%3A%22ALL%22%7D`,
+          "/json/" +
+          obj["DATASET_NAME_EN"].replace(/[^\w_-]/g, "_") +
+          ".geojson",
+        // `https://geodata.gov.hk/gs/api/v1.0.0/geoDataQuery?q=%7Bv%3A%221%2E0%2E0%22%2Cid%3A%22` +
+        // obj["DATASET_UUID"] +
+        // `%22%2Clang%3A%22ALL%22%7D`,
       };
     });
   });
@@ -34,7 +37,6 @@
   let customTableConfig = {
     // layout: "fitColumns", //fit columns to width of table
     paginationSize: 1000,
-    tooltips: true, //show tool tips on cells
     paginationCounter: "rows", //display count of paginated rows in footer
   };
 </script>
