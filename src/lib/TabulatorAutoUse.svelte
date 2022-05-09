@@ -12,6 +12,11 @@
   export let saveExcel = true;
   export let saveCSV = true;
   export let customTableConfig = {};
+  export let rowClickfFunction = () => {};
+  export let autoColumnFunction = (column) => {
+    column.headerFilter = true; // add header filter to every column
+    column.headerFilterPlaceholder = "Filter";
+  };
 
   let showItemSidebar = false;
   let searchTerm = "";
@@ -28,10 +33,7 @@
         },
         autoColumns: true,
         autoColumnsDefinitions: function (definitions) {
-          definitions.forEach((column) => {
-            column.headerFilter = true; // add header filter to every column
-            column.headerFilterPlaceholder = "Filter";
-          });
+          definitions.forEach(autoColumnFunction);
           return definitions;
         },
         // columns: columns,
@@ -42,6 +44,8 @@
       },
       ...customTableConfig,
     });
+
+    table.on("rowClick", rowClickfFunction);
 
     return {
       update: ({ ajaxurl }) => {

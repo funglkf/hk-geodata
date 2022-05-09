@@ -4,7 +4,7 @@
   const tableDataUrl = "/json/simplified_datasetinfo.json";
 
   const tablePluginSettings = {
-    title: "Dataset Overview",
+    title: "Dataset Overview (Click to open on map)",
     copyData: true,
     saveExcel: true,
     saveCSV: false,
@@ -15,27 +15,32 @@
     paginationSize: 1000,
     tooltips: true, //show tool tips on cells
     paginationCounter: "rows", //display count of paginated rows in footer
-    rowClickMenu: [
-      {
-        label: "Open Data in Map",
-        action: function (e, row) {
-          window
-            .open(
-              "/map/" +
-                row.getData()["DATASET_NAME_EN"].replace(/[^\w_-]/g, "_"),
-              "_self"
-              // `https://geojson.tools/?url=https://geodata.gov.hk/gs/api/v1.0.0/geoDataQuery?q=%7Bv%3A%221%2E0%2E0%22%2Cid%3A%22` +
-              //   row.getData()["DATASET_UUID"] +
-              //   `%22%2Clang%3A%22ALL%22%7D`
-              // ,"_blank"
-            )
-            .focus();
-        },
-      },
-    ],
+  };
+
+  const rowClickfFunction = (e, row) => {
+    window
+      .open(
+        "/map/" + row.getData()["DATASET_NAME_EN"].replace(/[^\w_-]/g, "_"),
+        "_self"
+      )
+      .focus();
+  };
+
+  const autoColumnFunction = (column) => {
+    column.headerFilter = true; // add header filter to every column
+    column.headerFilterPlaceholder = "filter";
+    if (column.field == "DATASET_UUID") {
+      column.visible = false;
+    }
   };
 </script>
 
 <main>
-  <TableAuto {tableDataUrl} {...tablePluginSettings} {customTableConfig} />
+  <TableAuto
+    {tableDataUrl}
+    {...tablePluginSettings}
+    {customTableConfig}
+    {rowClickfFunction}
+    {autoColumnFunction}
+  />
 </main>
