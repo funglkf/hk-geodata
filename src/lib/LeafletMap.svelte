@@ -8,7 +8,7 @@
 
   onMount(async () => {
     if (browser) {
-      const JSONFormatter = await import("json-formatter-js");
+      const JSONFormatter = (await import("json-formatter-js")).default;
       const leaflet = await import("leaflet");
 
       const OSM = leaflet.tileLayer(
