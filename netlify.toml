@@ -1,0 +1,6 @@
+[build]
+  command = "python get_hkgeo-data.py && npm run build"
+  publish = "build"
+
+[context.production]
+  environment = { PYTHON_VERSION = "3.8" }
