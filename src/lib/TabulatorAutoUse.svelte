@@ -13,6 +13,7 @@
   export let saveCSV = true;
   export let customTableConfig = {};
   export let rowClickfFunction = () => {};
+  export let dataLoadedFunction = () => {};
   export let autoColumnFunction = (column) => {
     column.headerFilter = true; // add header filter to every column
     column.headerFilterPlaceholder = "Filter";
@@ -45,7 +46,9 @@
       ...customTableConfig,
     });
 
+
     table.on("rowClick", rowClickfFunction);
+    table.on("dataLoaded", (data) => dataLoadedFunction(table,data));
 
     return {
       update: ({ ajaxurl }) => {
