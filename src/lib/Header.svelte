@@ -2,7 +2,7 @@
   import { page } from "$app/stores";
 
   const headerList = [
-    { href: "/", name: "Overview" },
+    { href: "/", name: "DataSet" },
     { href: "/dataset", name: "DataTable" },
     // { href: "/map", name: "map" },
   ];
@@ -13,12 +13,17 @@
     <div
       class="container mx-auto flex items-center justify-center border-b-2 border-gray-900"
     >
+      <img class="h-4 w-4 mx-1" src="/favicon.svg" alt="Icon" />
       <a
-        class="flex items-center font-serif italic font-semibold text-lg mr-4"
+        class="flex md:hidden items-center font-serif italic font-semibold text-lg mr-4"
         href="/"
       >
-        <img class="h-4 w-4 mx-1" src="/favicon.svg" alt="Icon" />
-        <!-- <Fa icon={faMagnifyingGlassChart} class="space-x-0" /> -->
+        HK Geo Data
+      </a>
+      <a
+        class="hidden md:flex items-center font-serif italic font-semibold text-lg mr-4"
+        href="/"
+      >
         Hong Kong Geo Data
       </a>
       <ul

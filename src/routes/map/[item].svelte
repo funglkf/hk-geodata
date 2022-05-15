@@ -25,7 +25,7 @@
   export let item;
 </script>
 
-<h1 class="px-6 text-lg font-semibold">Map ({item.replace(/[_]/g, " ")})</h1>
+<h1 class="px-6 text-lg font-semibold">{item.replace(/[_]/g, " ")}</h1>
 <div class="mx-5">
   <LeafletMap {apiUrl} />
 </div>
