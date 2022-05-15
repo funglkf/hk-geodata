@@ -46,9 +46,8 @@
       ...customTableConfig,
     });
 
-
     table.on("rowClick", rowClickfFunction);
-    table.on("dataLoaded", (data) => dataLoadedFunction(table,data));
+    table.on("dataLoaded", (data) => dataLoadedFunction(table, data));
 
     return {
       update: ({ ajaxurl }) => {
@@ -83,7 +82,12 @@
       class="overflow-y-auto min-w-[7rem] h-noHeader-noFooter text-gray-800 border-x-4 rounded"
     >
       <div class="flex items-center">
-        <svg style="width:20px;height:20px" viewBox="0 0 20 20">
+        <svg
+          style="width:20px;height:20px"
+          viewBox="0 0 20 20"
+          class="cursor-pointer"
+          on:click={() => (showItemSidebar = !showItemSidebar)}
+        >
           <path
             fill="currentColor"
             d="M1,4 H18 V6 H1 V4 M1,9 H18 V11 H1 V7 M3,14 H18 V16 H1 V14"
@@ -129,7 +133,9 @@
             d="M1,4 H18 V6 H1 V4 M1,9 H18 V11 H1 V7 M3,14 H18 V16 H1 V14"
           />
         </svg>
-        <div class="max-w-[100px] p-0 border border-solid rounded text-base">
+        <div
+          class="max-w-[150px] md:max-w-[300px] p-0 border border-solid rounded text-base"
+        >
           <AutoComplete
             items={tableList}
             bind:selectedItem={selectName}

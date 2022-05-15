@@ -14,7 +14,7 @@
         name: obj["DATASET_NAME_TC"],
         url:
           "/json/" +
-          obj["DATASET_NAME_EN"].replace(/[^\w_-]/g, "_") +
+          obj["DATASET_NAME_EN"].replace(/[^\w_-]+/g, "_") +
           ".geojson",
         // `https://geodata.gov.hk/gs/api/v1.0.0/geoDataQuery?q=%7Bv%3A%221%2E0%2E0%22%2Cid%3A%22` +
         // obj["DATASET_UUID"] +
@@ -29,7 +29,7 @@
   });
 
   let tablePluginSettings = {
-    copyData: true,
+    copyData: false,
     saveExcel: true,
     saveCSV: false,
   };
