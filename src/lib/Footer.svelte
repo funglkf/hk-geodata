@@ -3,7 +3,7 @@
     <li>
       <a
         class="text-gray-400 hover:text-gray-600"
-        href="https://geodata.gov.hk/">https://geodata.gov.hk/</a
+        href="https://geodata.gov.hk/">Data source: https://geodata.gov.hk/</a
       >
     </li>
   </ul>
