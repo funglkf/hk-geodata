@@ -3,4 +3,4 @@
   publish = "build"
 
 [context.production]
-  environment = { PYTHON_VERSION = "3.8" }
+  environment = { PYTHON_VERSION = "3.11" }

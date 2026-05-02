@@ -17,7 +17,7 @@ Including python process to scraping latest data on build, add `netlify.toml` at
   publish = "build"
 
 [context.production]
-  environment = { PYTHON_VERSION = "3.8" }
+  environment = { PYTHON_VERSION = "3.11" }
 ```
 ### Config daily rebuild
 1. Create `Build hooks` netlify site setting, then you will have a post url link for trigger build.
