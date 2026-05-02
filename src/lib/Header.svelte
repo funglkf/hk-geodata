@@ -2,7 +2,7 @@
   import { page } from "$app/stores";
 
   const headerList = [
-    { href: "/", name: "DataSet" },
+    { href: "/", name: "DataSet(Map)" },
     { href: "/dataset", name: "DataTable" },
     // { href: "/map", name: "map" },
   ];

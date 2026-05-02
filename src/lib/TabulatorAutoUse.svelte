@@ -19,10 +19,12 @@
     column.headerFilterPlaceholder = "Filter";
   };
 
-  let showItemSidebar = false;
+  let showItemSidebar = true;
   let searchTerm = "";
+  let filterOrg = "";
   let selectName;
   let table;
+  let selectedUrl = "";
 
   function makeTable(node, { ajaxurl }) {
     table = new Tabulator(node, {
@@ -71,15 +73,36 @@
     };
   }
 
-  $: filteredItemList = tableList.filter(
-    (item) => item.name.indexOf(searchTerm) !== -1
-  );
+  function orgLabel(item) {
+    const tc = (item?.nameTC ?? "").trim();
+    const en = (item?.nameEN ?? "").trim();
+    if (tc && en) return `${tc} / ${en}`;
+    return tc || en || "";
+  }
+
+  $: orgOptions = Array.from(
+    new Set(tableList.map((d) => orgLabel(d)).filter((v) => v))
+  ).sort((a, b) => a.localeCompare(b));
+
+  $: filteredItemList = tableList
+    .filter((item) => {
+      const needle = searchTerm.trim().toLowerCase();
+      if (!needle) return true;
+      const n = (item?.name ?? "").toLowerCase();
+      const tc = (item?.nameTC ?? "").toLowerCase();
+      const en = (item?.nameEN ?? "").toLowerCase();
+      return n.includes(needle) || tc.includes(needle) || en.includes(needle);
+    })
+    .filter((item) => {
+      if (filterOrg && orgLabel(item) !== filterOrg) return false;
+      return true;
+    });
 </script>
 
 <div class="flex">
   {#if showItemSidebar}
     <div
-      class="overflow-y-auto min-w-[7rem] h-noHeader-noFooter text-gray-800 border-x-4 rounded"
+      class="overflow-y-auto w-[240px] h-noHeader-noFooter text-gray-800 border-r bg-white"
     >
       <div class="flex items-center">
         <svg
@@ -96,21 +119,34 @@
         <h1 class="px-1 font-semibold text-base">List items</h1>
       </div>
       <input
-        class="mx-1 my-1 max-w-[6rem] text-xs border-solid border-2 rounded"
+        class="mx-2 my-2 w-[calc(100%-1rem)] text-xs border border-solid rounded px-2 py-1"
         placeholder="Search"
         bind:value={searchTerm}
       />
-      <ul class="space-y-1">
+      <div class="mx-2 mb-2">
+        <div class="text-[10px] text-gray-500 mb-1">Department (TC / EN)</div>
+        <select class="w-full border rounded px-2 py-1 text-xs" bind:value={filterOrg}>
+          <option value="">All</option>
+          {#each orgOptions as opt}
+            <option value={opt}>{opt}</option>
+          {/each}
+        </select>
+      </div>
+      <ul class="divide-y">
         {#each filteredItemList as { name, url }}
           <li>
-            <a
-              href="#{name}"
-              class="flex items-center p-1 text-xs font-normal text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            <button
+              type="button"
+              class={`w-full text-left px-2 py-2 text-xs font-normal
+                ${selectedUrl === url ? "bg-blue-50" : "bg-white"}
+                hover:bg-gray-50`}
               on:click={() => {
+                selectedUrl = url;
                 tableDataUrl = url;
               }}
-              >{name}
-            </a>
+            >
+              <div class="whitespace-normal break-words leading-snug">{name}</div>
+            </button>
           </li>
         {/each}
       </ul>
@@ -143,6 +179,10 @@
             labelFieldName="name"
             valueFieldName="url"
             placeholder="Select"
+            onChange={(item) => {
+              // keep sidebar highlight consistent even if user selects from autocomplete
+              selectedUrl = item?.url ?? tableDataUrl;
+            }}
           />
         </div>
         <!-- 				

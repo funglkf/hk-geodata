@@ -11,11 +11,16 @@
     // console.log(data);
     tableList = data.map((obj) => {
       return {
-        name: obj["DATASET_NAME_TC"],
+        name:
+          (obj["DATASET_NAME_TC"] ?? "") +
+          " / " +
+          (obj["DATASET_NAME_EN"] ?? ""),
         url:
           "/json/" +
           obj["DATASET_NAME_EN"].replace(/[^\w_-]+/g, "_") +
           ".geojson",
+        nameTC: obj["nameTC"],
+        nameEN: obj["nameEN"],
         // `https://geodata.gov.hk/gs/api/v1.0.0/geoDataQuery?q=%7Bv%3A%221%2E0%2E0%22%2Cid%3A%22` +
         // obj["DATASET_UUID"] +
         // `%22%2Clang%3A%22ALL%22%7D`,
